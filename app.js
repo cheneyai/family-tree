@@ -150,38 +150,40 @@
     xiaoyue:  { x: 920, y: 565 }
   };
 
-  const GEN_COLORS = { 6: "#6b3a1f", 7: "#8f4e2a", 8: "#b86a3d", 9: "#c9944a" };
-  const NODE_W = 92;
-  const NODE_H = 44;
+  /* Charcoal → terracotta hierarchy: older gens darker, younger warmer accent */
+  const GEN_COLORS = { 6: "#2e2e2b", 7: "#4a4a45", 8: "#c45c3a", 9: "#d4896e" };
+  const NODE_W = 100;
+  const NODE_H = 46;
+  const FONT_STACK = "Noto Sans SC, DM Sans, PingFang SC, Microsoft YaHei, sans-serif";
 
   let selectedId = null;
   let filterGen = "all";
 
   function $(sel) { return document.querySelector(sel); }
 
-  /* Warm self-contained SVG placeholder — no external CDN */
+  /* Soft editorial SVG placeholder — no external CDN */
   function imgUrl(seed) {
     var h = 0;
     for (var i = 0; i < seed.length; i++) h = ((h << 5) - h + seed.charCodeAt(i)) | 0;
-    var hues = [28, 32, 36, 22, 40, 18];
+    var hues = [18, 22, 28, 12, 8, 32];
     var hue = hues[Math.abs(h) % hues.length];
-    var c1 = "hsl(" + hue + ",42%,72%)";
-    var c2 = "hsl(" + (hue + 12) + ",38%,58%)";
-    var c3 = "hsl(" + (hue - 8) + ",35%,48%)";
+    var c1 = "hsl(" + hue + ",28%,88%)";
+    var c2 = "hsl(" + (hue + 8) + ",22%,78%)";
+    var c3 = "hsl(" + (hue - 4) + ",18%,70%)";
     var svg =
       '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">' +
       '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
       '<stop offset="0%" stop-color="' + c1 + '"/>' +
-      '<stop offset="55%" stop-color="' + c2 + '"/>' +
+      '<stop offset="50%" stop-color="' + c2 + '"/>' +
       '<stop offset="100%" stop-color="' + c3 + '"/>' +
       "</linearGradient></defs>" +
       '<rect width="640" height="400" fill="url(#g)"/>' +
-      '<circle cx="480" cy="90" r="70" fill="rgba(255,250,243,0.18)"/>' +
-      '<circle cx="120" cy="320" r="90" fill="rgba(42,34,26,0.08)"/>' +
-      '<text x="320" y="198" text-anchor="middle" fill="rgba(42,34,26,0.38)" ' +
-      'font-family="Songti SC,Noto Serif SC,serif" font-size="28" letter-spacing="0.35em">示意照片</text>' +
-      '<text x="320" y="232" text-anchor="middle" fill="rgba(42,34,26,0.28)" ' +
-      'font-family="PingFang SC,sans-serif" font-size="13">素材稍后补</text>' +
+      '<circle cx="520" cy="70" r="80" fill="rgba(255,255,255,0.35)"/>' +
+      '<circle cx="100" cy="340" r="100" fill="rgba(28,28,26,0.04)"/>' +
+      '<text x="320" y="190" text-anchor="middle" fill="rgba(28,28,26,0.28)" ' +
+      'font-family="DM Sans,Noto Sans SC,sans-serif" font-size="22" font-weight="600" letter-spacing="0.2em">示意照片</text>' +
+      '<text x="320" y="222" text-anchor="middle" fill="rgba(28,28,26,0.2)" ' +
+      'font-family="Noto Sans SC,sans-serif" font-size="13">素材稍后补</text>' +
       "</svg>";
     return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
@@ -242,6 +244,7 @@
     edges.innerHTML = "";
     nodes.innerHTML = "";
 
+    /* Parent–child edges with soft corner rounding feel via mid stem */
     Object.values(PEOPLE).forEach(function (p) {
       if (!p.parent) return;
       var a = POS[p.parent];
@@ -260,17 +263,33 @@
       edges.appendChild(path);
     });
 
+    /* Spouse mark: short dashed bar under node + tiny heart-dot ends */
     Object.values(PEOPLE).forEach(function (p) {
       if (!p.spouse) return;
       var pos = POS[p.id];
+      var y = pos.y + NODE_H / 2 + 10;
+      var x1 = pos.x - 26;
+      var x2 = pos.x + 26;
+
       var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      line.setAttribute("x1", pos.x - 22);
-      line.setAttribute("y1", pos.y + NODE_H / 2 + 8);
-      line.setAttribute("x2", pos.x + 22);
-      line.setAttribute("y2", pos.y + NODE_H / 2 + 8);
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y);
       line.setAttribute("class", "edge spouse-edge");
       line.dataset.person = p.id;
       edges.appendChild(line);
+
+      [x1, x2].forEach(function (cx) {
+        var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        dot.setAttribute("cx", cx);
+        dot.setAttribute("cy", y);
+        dot.setAttribute("r", 2.2);
+        dot.setAttribute("fill", "#9a9890");
+        dot.setAttribute("class", "edge spouse-edge");
+        dot.dataset.person = p.id;
+        edges.appendChild(dot);
+      });
     });
 
     Object.values(PEOPLE).forEach(function (p) {
@@ -284,40 +303,56 @@
       g.setAttribute("role", "button");
       g.setAttribute("aria-label", p.name);
 
+      /* Soft shadow ellipse under card */
+      var shadow = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      shadow.setAttribute("class", "node-shadow");
+      shadow.setAttribute("x", 2);
+      shadow.setAttribute("y", 3);
+      shadow.setAttribute("width", NODE_W);
+      shadow.setAttribute("height", NODE_H);
+      shadow.setAttribute("rx", 14);
+      shadow.setAttribute("ry", 14);
+      shadow.setAttribute("fill", "rgba(28,28,26,0.12)");
+      shadow.setAttribute("opacity", "0.35");
+
       var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       rect.setAttribute("class", "node-bg");
       rect.setAttribute("width", NODE_W);
       rect.setAttribute("height", NODE_H);
-      rect.setAttribute("rx", 12);
-      rect.setAttribute("ry", 12);
-      rect.setAttribute("fill", GEN_COLORS[p.gen] || "#8f4e2a");
-      rect.setAttribute("stroke", "#fffaf3");
+      rect.setAttribute("rx", 14);
+      rect.setAttribute("ry", 14);
+      rect.setAttribute("fill", GEN_COLORS[p.gen] || "#4a4a45");
+      rect.setAttribute("stroke", "#ffffff");
       rect.setAttribute("stroke-width", "2");
+      rect.setAttribute("filter", "url(#nodeDrop)");
 
       var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
       text.setAttribute("x", NODE_W / 2);
       text.setAttribute("y", NODE_H / 2 + 1);
       text.setAttribute("text-anchor", "middle");
       text.setAttribute("dominant-baseline", "middle");
-      text.setAttribute("fill", "#fffaf3");
+      text.setAttribute("fill", "#fafaf8");
       text.setAttribute("font-size", "13.5");
       text.setAttribute("font-weight", "600");
-      text.setAttribute("font-family", "PingFang SC, Noto Sans SC, Microsoft YaHei, sans-serif");
+      text.setAttribute("font-family", FONT_STACK);
+      text.setAttribute("letter-spacing", "0.04em");
       text.textContent = p.name;
       text.style.pointerEvents = "none";
 
+      g.appendChild(shadow);
       g.appendChild(rect);
       g.appendChild(text);
 
       if (p.spouse) {
         var sp = document.createElementNS("http://www.w3.org/2000/svg", "text");
         sp.setAttribute("x", NODE_W / 2);
-        sp.setAttribute("y", NODE_H + 16);
+        sp.setAttribute("y", NODE_H + 18);
         sp.setAttribute("text-anchor", "middle");
-        sp.setAttribute("fill", "#7a654f");
+        sp.setAttribute("fill", "#6b6b64");
         sp.setAttribute("font-size", "10.5");
-        sp.setAttribute("font-family", "PingFang SC, Noto Sans SC, Microsoft YaHei, sans-serif");
-        sp.textContent = "配 " + p.spouse;
+        sp.setAttribute("font-weight", "500");
+        sp.setAttribute("font-family", FONT_STACK);
+        sp.textContent = "配 · " + p.spouse;
         sp.style.pointerEvents = "none";
         g.appendChild(sp);
       }
