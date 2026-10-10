@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="可穿透的家族瞬间 — 李登福支系族谱与记忆">
+<meta name="robots" content="noindex, nofollow">
+<title>可穿透的家族瞬间 · 李登福支系</title>
+<style>
+  :root {
+    --bg: #f7f1e8;
+    --bg-deep: #efe6d8;
+    --bg-card: #fffaf3;
+    --ink: #2a221a;
+    --ink-soft: #5c4f42;
+    --ink-mute: #8a7b6a;
+    --line: #d9cbb8;
+    --line-soft: #e8dccb;
+    --accent: #b86a3d;
+    --accent-deep: #8f4e2a;
+    --accent-glow: rgba(184, 106, 61, 0.28);
+    --spouse: #7a654f;
+    --paper-grain: rgba(42, 34, 26, 0.03);
+    --shadow: 0 8px 28px rgba(42, 34, 26, 0.08);
+    --shadow-lg: 0 16px 48px rgba(42, 34, 26, 0.14);
+    --radius: 18px;
+    --font: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --serif: "Songti SC", "Noto Serif SC", "STSong", "SimSun", serif;
+    --gen6: #6b3a1f;
+    --gen7: #8f4e2a;
+    --gen8: #b86a3d;
+    --gen9: #c9944a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    min-height: 100%;
+    font-family: var(--font);
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse at 12% 0%, rgba(201, 148, 74, 0.12), transparent 42%),
+      radial-gradient(ellipse at 88% 18%, rgba(184, 106, 61, 0.08), transparent 40%),
+      linear-gradient(180deg, #faf5ee 0%, var(--bg) 40%, #f3eadf 100%);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body.locked { overflow: hidden; }
+  body.unlocked #gate { display: none; }
+  body.locked #app { visibility: hidden; pointer-events: none; }
+
+  /* ===== Passcode gate ===== */
+  #gate {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 1.25rem;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(184, 106, 61, 0.18), transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(107, 58, 31, 0.2), transparent 45%),
+      #2a221a;
+  }
+  .gate-card {
+    width: min(100%, 400px);
+    background: var(--bg-card);
+    border-radius: 22px;
+    padding: 1.75rem 1.5rem 1.4rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 250, 243, 0.12);
+  }
+  .gate-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .gate-card h1 {
+    font-family: var(--serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.35rem;
+  }
+  .gate-card .sub {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    margin-bottom: 1rem;
+  }
+  .gate-card .notice {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    background: var(--bg-deep);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 0.7rem 0.85rem;
+    margin-bottom: 1.15rem;
+    line-height: 1.55;
+  }
+  .gate-card label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 0.35rem;
+  }
+  .gate-card input[type="password"] {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    font-size: 1.05rem;
+    letter-spacing: 0.2em;
+    background: #fff;
+    color: var(--ink);
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .gate-card input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .gate-card .err {
+    min-height: 1.2rem;
+    font-size: 0.78rem;
+    color: #b33a2b;
+    margin: 0.4rem 0 0.75rem;
+  }
+  .gate-card button {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.15s;
+  }
+  .gate-card button:hover { filter: brightness(1.06); }
+  .gate-card button:active { transform: scale(0.98); }
+  .gate-card .foot {
+    margin-top: 0.9rem;
+    font-size: 0.7rem;
+    color: var(--ink-mute);
+    text-align: center;
+  }
+
+  /* ===== App shell ===== */
+  #app { min-height: 100dvh; display: flex; flex-direction: column; }
+
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    padding: 1rem 1.25rem 1.05rem;
+    color: #faf6f1;
+    background:
+      linear-gradient(135deg, #2f241c 0%, #4a3428 55%, #5c4030 100%);
+    box-shadow: 0 4px 24px rgba(42, 34, 26, 0.25);
+  }
+  .header-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .site-header .badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    background: rgba(184, 106, 61, 0.92);
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+    font-weight: 600;
+    margin-bottom: 0.45rem;
+  }
+  .site-header h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.2rem, 3.6vw, 1.55rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.3rem;
+  }
+  .site-header .lead {
+    font-size: 0.82rem;
+    opacity: 0.88;
+    max-width: 40rem;
+  }
+  .lock-btn {
+    flex-shrink: 0;
+    border: 1px solid rgba(250, 246, 241, 0.28);
+    background: rgba(255,255,255,0.06);
+    color: #faf6f1;
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .lock-btn:hover { background: rgba(255,255,255,0.12); }
+
+  .note-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    padding: 0.55rem 1.25rem;
+    background: #f0e5d6;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+  }
+  .note-bar strong { color: var(--accent-deep); font-weight: 700; }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 0.85rem;
+    align-items: center;
+    padding: 0.8rem 1.25rem;
+    background: rgba(255, 250, 243, 0.72);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .toolbar .label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chip {
+    border: 1.5px solid var(--line);
+    background: var(--bg-card);
+    color: var(--ink);
+    padding: 0.32rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent-deep); }
+  .chip.active {
+    background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 4px 12px var(--accent-glow);
+  }
+  .hint {
+    font-size: 0.72rem;
+    color: var(--ink-mute);
+    margin-left: auto;
+  }
+
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  @media (min-width: 960px) {
+    .main { grid-template-columns: 1fr minmax(320px, 380px); }
+    .panel {
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+      max-height: 100dvh;
+      overflow-y: auto;
+      border-left: 1px solid var(--line);
+      align-self: start;
+    }
+  }
+
+  .graph-wrap {
+    position: relative;
+    overflow: auto;
+    padding: 1rem 0.75rem 1.5rem;
+    min-height: 540px;
+    background:
+      linear-gradient(90deg, rgba(42,34,26,0.015) 1px, transparent 1px),
+      linear-gradient(rgba(42,34,26,0.015) 1px, transparent 1px),
+      radial-gradient(ellipse at 40% 10%, rgba(201, 148, 74, 0.14), transparent 48%),
+      transparent;
+    background-size: 28px 28px, 28px 28px, auto, auto;
+  }
+  .graph-hint {
+    text-align: center;
+    font-size: 0.76rem;
+    color: var(--ink-mute);
+    margin-bottom: 0.65rem;
+  }
+  .graph-svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    user-select: none;
+  }
+
+  .person-node { cursor: pointer; }
+  .person-node .node-bg {
+    transition: filter 0.2s, stroke-width 0.2s, stroke 0.2s;
+  }
+  .person-node:hover .node-bg {
+    filter: brightness(1.1);
+    stroke-width: 2.8;
+  }
+  .person-node.selected .node-bg {
+    stroke: var(--accent);
+    stroke-width: 3.2;
+    filter: drop-shadow(0 0 8px rgba(184, 106, 61, 0.55));
+  }
+  .person-node.dimmed {
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .person-node.dimmed .node-bg { filter: grayscale(0.7); }
+  .edge {
+    fill: none;
+    stroke: #c9b79f;
+    stroke-width: 1.6;
+    transition: opacity 0.25s;
+  }
+  .edge.dimmed { opacity: 0.12; }
+  .spouse-edge {
+    stroke: var(--spouse);
+    stroke-dasharray: 3.5 3;
+    stroke-width: 1.15;
+  }
+  .gen-label {
+    font-size: 11px;
+    fill: var(--ink-mute);
+    font-family: var(--font);
+    letter-spacing: 0.08em;
+  }
+  .branch-band {
+    fill: rgba(184, 106, 61, 0.04);
+    stroke: none;
+  }
+
+  .panel {
+    background: var(--bg-card);
+    padding: 1.25rem 1.2rem 1.5rem;
+  }
+  .panel-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 300px;
+    color: var(--ink-mute);
+    gap: 0.7rem;
+    padding: 1rem;
+  }
+  .panel-empty .seal {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--bg-deep);
+    border: 1.5px dashed var(--line);
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    color: var(--accent-deep);
+  }
+  .panel-empty p { font-size: 0.9rem; max-width: 240px; }
+
+  .person-card h2 {
+    font-family: var(--serif);
+    font-size: 1.45rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+  }
+  .person-meta {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.85rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .person-meta span {
+    background: var(--bg-deep);
+    padding: 0.18rem 0.55rem;
+    border-radius: 8px;
+  }
+  .spouse-note {
+    font-size: 0.86rem;
+    color: var(--spouse);
+    margin-bottom: 0.85rem;
+    padding: 0.55rem 0.8rem;
+    background: var(--bg-deep);
+    border-radius: 12px;
+    border-left: 3px solid var(--accent);
+  }
+  .moments-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 1.1rem 0 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .moments-title::before {
+    content: "";
+    width: 4px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .moment {
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 0.95rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line-soft);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .moment:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+  .moment-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(145deg, #e8dccb, #d9cbb8 50%, #c9b79f);
+    overflow: hidden;
+  }
+  .moment-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.92;
+  }
+  .moment-media .ph {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    color: rgba(42, 34, 26, 0.45);
+    letter-spacing: 0.12em;
+    pointer-events: none;
+  }
+  .moment figcaption { padding: 0.75rem 0.9rem 0.85rem; }
+  .moment .cap-year {
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .demo-tag {
+    font-size: 0.62rem;
+    background: #f0e6dc;
+    color: var(--ink-mute);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .moment .cap-text { font-size: 0.86rem; color: var(--ink); }
+
+  .close-btn {
+    display: none;
+    width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.7rem;
+    border: 1.5px solid var(--line);
+    background: var(--bg);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .close-btn:hover { border-color: var(--accent); color: var(--accent-deep); }
+
+  @media (max-width: 959px) {
+    .panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 58dvh;
+      overflow-y: auto;
+      border-radius: 22px 22px 0 0;
+      box-shadow: 0 -10px 40px rgba(42, 34, 26, 0.18);
+      z-index: 50;
+      transform: translateY(110%);
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .panel.open { transform: translateY(0); }
+    .close-btn { display: block; }
+    .panel-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(42, 34, 26, 0.38);
+      z-index: 45;
+    }
+    .panel-backdrop.open { display: block; }
+  }
+
+  footer {
+    text-align: center;
+    padding: 0.95rem 1rem 1.2rem;
+    font-size: 0.72rem;
+    color: var(--ink-mute);
+    border-top: 1px solid var(--line-soft);
+    background: rgba(255, 250, 243, 0.6);
+  }
+</style>
+</head>
+<body class="locked">
+
+<!-- Passcode gate -->
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <div class="gate-card">
+    <div class="gate-badge">家族记忆 · 示意</div>
+    <h1 id="gateTitle">可穿透的家族瞬间</h1>
+    <p class="sub">李登福支系 · 六世至九世</p>
+    <div class="notice">
+      说明：GitHub Pages 无法提供真正的私有访问。本页仅为<strong>浏览器本地通行码</strong>门禁（非服务端鉴权、非私有托管）。知道通行码的人仍可查看页面内容；请勿存放高度敏感信息。素材稍后补，当前为示意。
+    </div>
+    <label for="passcode">通行码</label>
+    <input id="passcode" type="password" inputmode="numeric" autocomplete="off" maxlength="32" placeholder="••••••••" />
+    <div class="err" id="gateErr"></div>
+    <button type="button" id="gateBtn">进入家族瞬间</button>
+    <p class="foot">解锁状态保存在 sessionStorage · 关闭标签后需重新输入</p>
+  </div>
+</div>
+
+<div id="app">
+  <header class="site-header">
+    <div class="header-top">
+      <div>
+        <div class="badge">家族记忆 · 示意稿</div>
+        <h1>可穿透的家族瞬间</h1>
+        <p class="lead">以人际关系图谱为骨架，点击人物进入「瞬间」；世代筛选为滤镜。素材稍后补，当前为示意占位。</p>
+      </div>
+      <button type="button" class="lock-btn" id="lockBtn" title="重新上锁">重新上锁</button>
+    </div>
+  </header>
+
+  <div class="note-bar">
+    <span><strong>示意说明：</strong>照片与短文均为占位，非正式谱牒；配偶关系以虚线示意。</span>
+    <span>虚线 = 配偶 · 实线 = 父子辈</span>
+  </div>
+
+  <div class="toolbar">
+    <span class="label">世代滤镜</span>
+    <div class="chips" id="genChips" role="group" aria-label="世代筛选">
+      <button type="button" class="chip active" data-gen="all">全部</button>
+      <button type="button" class="chip" data-gen="6">六世</button>
+      <button type="button" class="chip" data-gen="7">七世</button>
+      <button type="button" class="chip" data-gen="8">八世</button>
+      <button type="button" class="chip" data-gen="9">九世</button>
+    </div>
+    <span class="hint">未选世代会淡出 · 点人物看瞬间</span>
+  </div>
+
+  <div class="main">
+    <div class="graph-wrap">
+      <p class="graph-hint">点击人物节点 · 虚线为配偶 · 实线为父子辈</p>
+      <svg class="graph-svg" id="treeSvg" viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="李登福支系族谱图">
+        <rect class="branch-band" x="40" y="40" width="1020" height="80" rx="16"></rect>
+        <rect class="branch-band" x="40" y="180" width="1020" height="80" rx="16"></rect>
+        <rect class="branch-band" x="40" y="340" width="1020" height="90" rx="16"></rect>
+        <rect class="branch-band" x="40" y="520" width="1020" height="90" rx="16"></rect>
+        <g id="edges"></g>
+        <g id="nodes"></g>
+        <text class="gen-label" x="56" y="72">六世</text>
+        <text class="gen-label" x="56" y="212">七世</text>
+        <text class="gen-label" x="56" y="372">八世</text>
+        <text class="gen-label" x="56" y="552">九世</text>
+      </svg>
+    </div>
+
+    <div class="panel-backdrop" id="backdrop"></div>
+    <aside class="panel" id="panel" aria-live="polite">
+      <div class="panel-empty" id="panelEmpty">
+        <div class="seal">家</div>
+        <p>点击图谱中的人物，穿透查看示意「瞬间」</p>
+      </div>
+      <div class="person-card" id="personCard" hidden></div>
+    </aside>
+  </div>
+
+  <footer>李登福支系 · 「可穿透的家族瞬间」示意 · 素材稍后补 · 非正式谱牒</footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
