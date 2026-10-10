@@ -5,104 +5,160 @@
   const PASSCODE = "88888888";
   const GATE_KEY = "family_moments_unlocked_v1";
 
+  /* Bloodline + spouses as first-class people (spouses have role:"spouse") */
   const PEOPLE = {
     dengfu: {
       id: "dengfu", name: "李登福", gen: 6, genLabel: "六世",
       note: "谱图亦作「福登」",
-      spouse: "贾氏",
-      parent: null,
+      spouseId: "jia", parent: null,
       moments: [
         { seed: "dengfu-a", year: "示意 · 六世", caption: "支系起点：登福公一门的记忆入口（占位）" },
         { seed: "dengfu-b", year: "示意", caption: "与贾氏结成此房根基（占位图）" }
       ]
     },
+    jia: {
+      id: "jia", name: "贾氏", gen: 6, genLabel: "六世",
+      role: "spouse", spouseOf: "dengfu", parent: null,
+      moments: [
+        { seed: "jia-a", year: "示意 · 六世", caption: "贾氏：与登福公结成支系根基（占位）" },
+        { seed: "jia-b", year: "示意", caption: "待补：贾氏相关瞬间" }
+      ]
+    },
     heping: {
       id: "heping", name: "李和平", gen: 7, genLabel: "七世",
-      spouse: "李学华", parent: "dengfu",
+      spouseId: "xuehua", parent: "dengfu",
       moments: [
         { seed: "heping-a", year: "示意 · 七世", caption: "和平一门：翠茹、艳茹、慧茹的父辈瞬间（占位）" },
         { seed: "heping-b", year: "示意", caption: "与李学华的家庭示意" }
       ]
     },
+    xuehua: {
+      id: "xuehua", name: "李学华", gen: 7, genLabel: "七世",
+      role: "spouse", spouseOf: "heping", parent: null,
+      moments: [
+        { seed: "xuehua-a", year: "示意 · 七世", caption: "李学华：和平一门的配偶瞬间（占位）" },
+        { seed: "xuehua-b", year: "示意", caption: "待补：与和平的家庭合影" }
+      ]
+    },
     hezhu: {
       id: "hezhu", name: "李和柱", gen: 7, genLabel: "七世",
-      spouse: "李振芬", parent: "dengfu",
+      spouseId: "zhenfen", parent: "dengfu",
       moments: [
         { seed: "hezhu-a", year: "示意 · 七世", caption: "和柱一门：洪建、红丽的父辈瞬间（占位）" },
         { seed: "hezhu-b", year: "示意", caption: "与李振芬的家庭示意" }
       ]
     },
+    zhenfen: {
+      id: "zhenfen", name: "李振芬", gen: 7, genLabel: "七世",
+      role: "spouse", spouseOf: "hezhu", parent: null,
+      moments: [
+        { seed: "zhenfen-a", year: "示意 · 七世", caption: "李振芬：和柱一门的配偶瞬间（占位）" },
+        { seed: "zhenfen-b", year: "示意", caption: "待补：与和柱的家庭合影" }
+      ]
+    },
     heshan: {
       id: "heshan", name: "李和山", gen: 7, genLabel: "七世",
-      spouse: "李金花", parent: "dengfu",
+      spouseId: "jinhua", parent: "dengfu",
       moments: [
         { seed: "heshan-a", year: "示意 · 七世", caption: "和山一门：秋红、秋明的父辈瞬间（占位）" },
         { seed: "heshan-b", year: "示意", caption: "与李金花的家庭示意" }
       ]
     },
+    jinhua: {
+      id: "jinhua", name: "李金花", gen: 7, genLabel: "七世",
+      role: "spouse", spouseOf: "heshan", parent: null,
+      moments: [
+        { seed: "jinhua-a", year: "示意 · 七世", caption: "李金花：和山一门的配偶瞬间（占位）" },
+        { seed: "jinhua-b", year: "示意", caption: "待补：与和山的家庭合影" }
+      ]
+    },
     heying: {
       id: "heying", name: "李和英", gen: 7, genLabel: "七世",
-      spouse: null, parent: "dengfu",
+      spouseId: null, parent: "dengfu",
       moments: [
         { seed: "heying-a", year: "示意 · 七世", caption: "和英示意片刻（配偶待补）" }
       ]
     },
     cuiru: {
       id: "cuiru", name: "李翠茹", gen: 8, genLabel: "八世",
-      spouse: null, parent: "heping",
+      spouseId: null, parent: "heping",
       moments: [
         { seed: "cuiru-a", year: "示意 · 八世", caption: "翠茹的示意瞬间" }
       ]
     },
     yanru: {
       id: "yanru", name: "李艳茹", gen: 8, genLabel: "八世",
-      spouse: null, parent: "heping",
+      spouseId: null, parent: "heping",
       moments: [
         { seed: "yanru-a", year: "示意 · 八世", caption: "艳茹的示意瞬间" }
       ]
     },
     huiru: {
       id: "huiru", name: "李慧茹", gen: 8, genLabel: "八世",
-      spouse: null, parent: "heping",
+      spouseId: null, parent: "heping",
       moments: [
         { seed: "huiru-a", year: "示意 · 八世", caption: "慧茹的示意瞬间" }
       ]
     },
     hongjian: {
       id: "hongjian", name: "李洪建", gen: 8, genLabel: "八世",
-      spouse: "刘海燕", parent: "hezhu",
+      spouseId: "haiyan", parent: "hezhu",
       moments: [
         { seed: "hongjian-a", year: "示意 · 八世", caption: "洪建一门：奕非、奕凡的父辈瞬间（占位）" },
         { seed: "hongjian-b", year: "示意", caption: "与刘海燕的家庭示意" },
         { seed: "hongjian-c", year: "示意", caption: "待补：一张真实合影" }
       ]
     },
+    haiyan: {
+      id: "haiyan", name: "刘海燕", gen: 8, genLabel: "八世",
+      role: "spouse", spouseOf: "hongjian", parent: null,
+      moments: [
+        { seed: "haiyan-a", year: "示意 · 八世", caption: "刘海燕：洪建一门的配偶瞬间（占位）" },
+        { seed: "haiyan-b", year: "示意", caption: "待补：与洪建的家庭合影" }
+      ]
+    },
     hongli: {
       id: "hongli", name: "李红丽", gen: 8, genLabel: "八世",
-      spouse: "李松行", parent: "hezhu",
+      spouseId: "songxing", parent: "hezhu",
       moments: [
         { seed: "hongli-a", year: "示意 · 八世", caption: "红丽的示意瞬间" },
         { seed: "hongli-b", year: "示意", caption: "与李松行的家庭示意" }
       ]
     },
+    songxing: {
+      id: "songxing", name: "李松行", gen: 8, genLabel: "八世",
+      role: "spouse", spouseOf: "hongli", parent: null,
+      moments: [
+        { seed: "songxing-a", year: "示意 · 八世", caption: "李松行：红丽的配偶瞬间（占位）" },
+        { seed: "songxing-b", year: "示意", caption: "待补：与红丽的家庭合影" }
+      ]
+    },
     qiuhong: {
       id: "qiuhong", name: "李秋红", gen: 8, genLabel: "八世",
-      spouse: null, parent: "heshan",
+      spouseId: null, parent: "heshan",
       moments: [
         { seed: "qiuhong-a", year: "示意 · 八世", caption: "秋红的示意瞬间" }
       ]
     },
     qiuming: {
       id: "qiuming", name: "李秋明", gen: 8, genLabel: "八世",
-      spouse: "刘双双", parent: "heshan",
+      spouseId: "shuangshuang", parent: "heshan",
       moments: [
         { seed: "qiuming-a", year: "示意 · 八世", caption: "秋明一门：晓桐、晓月的父辈瞬间（占位）" },
         { seed: "qiuming-b", year: "示意", caption: "与刘双双的家庭示意" }
       ]
     },
+    shuangshuang: {
+      id: "shuangshuang", name: "刘双双", gen: 8, genLabel: "八世",
+      role: "spouse", spouseOf: "qiuming", parent: null,
+      moments: [
+        { seed: "shuang-a", year: "示意 · 八世", caption: "刘双双：秋明一门的配偶瞬间（占位）" },
+        { seed: "shuang-b", year: "示意", caption: "待补：与秋明的家庭合影" }
+      ]
+    },
     yifei: {
       id: "yifei", name: "李奕非", gen: 9, genLabel: "九世",
-      spouse: null, parent: "hongjian",
+      spouseId: null, parent: "hongjian",
       moments: [
         { seed: "yifei-a", year: "示意 · 九世", caption: "奕非的示意瞬间" },
         { seed: "yifei-b", year: "示意", caption: "待补：成长中的一张照片" }
@@ -110,50 +166,61 @@
     },
     yifan: {
       id: "yifan", name: "李奕凡", gen: 9, genLabel: "九世",
-      spouse: null, parent: "hongjian",
+      spouseId: null, parent: "hongjian",
       moments: [
         { seed: "yifan-a", year: "示意 · 九世", caption: "奕凡的示意瞬间" }
       ]
     },
     xiaotong: {
       id: "xiaotong", name: "李晓桐", gen: 9, genLabel: "九世",
-      spouse: null, parent: "qiuming",
+      spouseId: null, parent: "qiuming",
       moments: [
         { seed: "xiaotong-a", year: "示意 · 九世", caption: "晓桐的示意瞬间" }
       ]
     },
     xiaoyue: {
       id: "xiaoyue", name: "李晓月", gen: 9, genLabel: "九世",
-      spouse: null, parent: "qiuming",
+      spouseId: null, parent: "qiuming",
       moments: [
         { seed: "xiaoyue-a", year: "示意 · 九世", caption: "晓月的示意瞬间" }
       ]
     }
   };
 
+  /* Center of each person card. Couples sit side-by-side (bloodline left, spouse right). */
   const POS = {
-    dengfu:   { x: 550, y: 80 },
-    heping:   { x: 220, y: 220 },
-    hezhu:    { x: 450, y: 220 },
-    heshan:   { x: 720, y: 220 },
-    heying:   { x: 920, y: 220 },
-    cuiru:    { x: 100, y: 385 },
-    yanru:    { x: 210, y: 385 },
-    huiru:    { x: 320, y: 385 },
-    hongjian: { x: 460, y: 385 },
-    hongli:   { x: 580, y: 385 },
-    qiuhong:  { x: 720, y: 385 },
-    qiuming:  { x: 860, y: 385 },
-    yifei:    { x: 410, y: 565 },
-    yifan:    { x: 510, y: 565 },
-    xiaotong: { x: 810, y: 565 },
-    xiaoyue:  { x: 920, y: 565 }
+    dengfu:        { x: 560, y: 88 },
+    jia:           { x: 690, y: 88 },
+
+    heping:        { x: 150, y: 240 },
+    xuehua:        { x: 280, y: 240 },
+    hezhu:         { x: 440, y: 240 },
+    zhenfen:       { x: 570, y: 240 },
+    heshan:        { x: 740, y: 240 },
+    jinhua:        { x: 870, y: 240 },
+    heying:        { x: 1040, y: 240 },
+
+    cuiru:         { x: 90,  y: 420 },
+    yanru:         { x: 200, y: 420 },
+    huiru:         { x: 310, y: 420 },
+    hongjian:      { x: 450, y: 420 },
+    haiyan:        { x: 580, y: 420 },
+    hongli:        { x: 720, y: 420 },
+    songxing:      { x: 850, y: 420 },
+    qiuhong:       { x: 980, y: 420 },
+    qiuming:       { x: 1120, y: 420 },
+    shuangshuang:  { x: 1250, y: 420 },
+
+    yifei:         { x: 450, y: 600 },
+    yifan:         { x: 580, y: 600 },
+    xiaotong:      { x: 1120, y: 600 },
+    xiaoyue:       { x: 1250, y: 600 }
   };
 
-  /* Charcoal → terracotta hierarchy: older gens darker, younger warmer accent */
   const GEN_COLORS = { 6: "#2e2e2b", 7: "#4a4a45", 8: "#c45c3a", 9: "#d4896e" };
-  const NODE_W = 100;
-  const NODE_H = 46;
+  const SPOUSE_FILL = "#7a7870";
+  const NODE_W = 112;
+  const NODE_H = 64;
   const FONT_STACK = "Noto Sans SC, DM Sans, PingFang SC, Microsoft YaHei, sans-serif";
 
   let selectedId = null;
@@ -161,7 +228,17 @@
 
   function $(sel) { return document.querySelector(sel); }
 
-  /* Soft editorial SVG placeholder — no external CDN */
+  function isSpouse(p) {
+    return !!(p && p.role === "spouse");
+  }
+
+  function avatarGlyph(name) {
+    if (!name) return "·";
+    /* Prefer given-name character (last) for multi-char names; keep 氏 names' first char */
+    if (name.length >= 2 && name.charAt(name.length - 1) === "氏") return name.charAt(0);
+    return name.charAt(name.length - 1);
+  }
+
   function imgUrl(seed) {
     var h = 0;
     for (var i = 0; i < seed.length; i++) h = ((h << 5) - h + seed.charCodeAt(i)) | 0;
@@ -244,11 +321,12 @@
     edges.innerHTML = "";
     nodes.innerHTML = "";
 
-    /* Parent–child edges with soft corner rounding feel via mid stem */
+    /* Parent–child edges (bloodline only) */
     Object.values(PEOPLE).forEach(function (p) {
-      if (!p.parent) return;
+      if (!p.parent || isSpouse(p)) return;
       var a = POS[p.parent];
       var b = POS[p.id];
+      if (!a || !b) return;
       var midY = (a.y + b.y) / 2;
       var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path.setAttribute("d",
@@ -263,47 +341,50 @@
       edges.appendChild(path);
     });
 
-    /* Spouse mark: short dashed bar under node + tiny heart-dot ends */
+    /* Spouse link: dashed line between couple centers */
     Object.values(PEOPLE).forEach(function (p) {
-      if (!p.spouse) return;
-      var pos = POS[p.id];
-      var y = pos.y + NODE_H / 2 + 10;
-      var x1 = pos.x - 26;
-      var x2 = pos.x + 26;
-
+      if (!p.spouseId) return;
+      var a = POS[p.id];
+      var b = POS[p.spouseId];
+      if (!a || !b) return;
       var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      line.setAttribute("x1", x1);
-      line.setAttribute("y1", y);
-      line.setAttribute("x2", x2);
-      line.setAttribute("y2", y);
+      line.setAttribute("x1", a.x + NODE_W / 2 - 4);
+      line.setAttribute("y1", a.y);
+      line.setAttribute("x2", b.x - NODE_W / 2 + 4);
+      line.setAttribute("y2", b.y);
       line.setAttribute("class", "edge spouse-edge");
       line.dataset.person = p.id;
+      line.dataset.spouse = p.spouseId;
       edges.appendChild(line);
 
-      [x1, x2].forEach(function (cx) {
-        var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        dot.setAttribute("cx", cx);
-        dot.setAttribute("cy", y);
-        dot.setAttribute("r", 2.2);
-        dot.setAttribute("fill", "#9a9890");
-        dot.setAttribute("class", "edge spouse-edge");
-        dot.dataset.person = p.id;
-        edges.appendChild(dot);
-      });
+      var midX = (a.x + b.x) / 2;
+      var midY = (a.y + b.y) / 2;
+      var heart = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      heart.setAttribute("cx", midX);
+      heart.setAttribute("cy", midY);
+      heart.setAttribute("r", 3);
+      heart.setAttribute("fill", "#9a9890");
+      heart.setAttribute("class", "edge spouse-edge");
+      heart.dataset.person = p.id;
+      heart.dataset.spouse = p.spouseId;
+      edges.appendChild(heart);
     });
 
     Object.values(PEOPLE).forEach(function (p) {
       var pos = POS[p.id];
+      if (!pos) return;
+      var spouse = isSpouse(p);
+      var fill = spouse ? SPOUSE_FILL : (GEN_COLORS[p.gen] || "#4a4a45");
       var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      g.setAttribute("class", "person-node");
+      g.setAttribute("class", "person-node" + (spouse ? " spouse-node" : ""));
       g.dataset.id = p.id;
       g.dataset.gen = String(p.gen);
+      g.dataset.role = spouse ? "spouse" : "bloodline";
       g.setAttribute("transform", "translate(" + (pos.x - NODE_W / 2) + "," + (pos.y - NODE_H / 2) + ")");
       g.setAttribute("tabindex", "0");
       g.setAttribute("role", "button");
-      g.setAttribute("aria-label", p.name);
+      g.setAttribute("aria-label", spouse ? p.name + "（配偶）" : p.name);
 
-      /* Soft shadow ellipse under card */
       var shadow = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       shadow.setAttribute("class", "node-shadow");
       shadow.setAttribute("x", 2);
@@ -321,40 +402,91 @@
       rect.setAttribute("height", NODE_H);
       rect.setAttribute("rx", 14);
       rect.setAttribute("ry", 14);
-      rect.setAttribute("fill", GEN_COLORS[p.gen] || "#4a4a45");
-      rect.setAttribute("stroke", "#ffffff");
-      rect.setAttribute("stroke-width", "2");
+      rect.setAttribute("fill", fill);
+      rect.setAttribute("stroke", spouse ? "#e8e6e0" : "#ffffff");
+      rect.setAttribute("stroke-width", spouse ? "1.5" : "2");
       rect.setAttribute("filter", "url(#nodeDrop)");
 
+      /* Avatar circle + glyph */
+      var avCx = 22;
+      var avCy = NODE_H / 2;
+      var avBg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      avBg.setAttribute("class", "node-avatar");
+      avBg.setAttribute("cx", avCx);
+      avBg.setAttribute("cy", avCy);
+      avBg.setAttribute("r", 14);
+      avBg.setAttribute("fill", spouse ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.18)");
+      avBg.setAttribute("stroke", "rgba(255,255,255,0.45)");
+      avBg.setAttribute("stroke-width", "1");
+
+      var avText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      avText.setAttribute("x", avCx);
+      avText.setAttribute("y", avCy + 1);
+      avText.setAttribute("text-anchor", "middle");
+      avText.setAttribute("dominant-baseline", "middle");
+      avText.setAttribute("fill", "#fafaf8");
+      avText.setAttribute("font-size", "12");
+      avText.setAttribute("font-weight", "700");
+      avText.setAttribute("font-family", FONT_STACK);
+      avText.textContent = avatarGlyph(p.name);
+      avText.style.pointerEvents = "none";
+
+      /* Person icon ring accent (tiny user silhouette hint via path) */
+      var iconHint = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      iconHint.setAttribute("cx", avCx);
+      iconHint.setAttribute("cy", avCy - 3.5);
+      iconHint.setAttribute("r", 3.2);
+      iconHint.setAttribute("fill", "none");
+      iconHint.setAttribute("stroke", "rgba(250,250,248,0.55)");
+      iconHint.setAttribute("stroke-width", "1");
+      iconHint.style.pointerEvents = "none";
+      iconHint.setAttribute("opacity", "0"); /* glyph is primary; keep path for future */
+
+      var nameX = 44;
       var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      text.setAttribute("x", NODE_W / 2);
-      text.setAttribute("y", NODE_H / 2 + 1);
-      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("x", nameX);
+      text.setAttribute("y", spouse ? NODE_H / 2 - 8 : NODE_H / 2);
       text.setAttribute("dominant-baseline", "middle");
       text.setAttribute("fill", "#fafaf8");
-      text.setAttribute("font-size", "13.5");
+      text.setAttribute("font-size", "13");
       text.setAttribute("font-weight", "600");
       text.setAttribute("font-family", FONT_STACK);
-      text.setAttribute("letter-spacing", "0.04em");
+      text.setAttribute("letter-spacing", "0.02em");
       text.textContent = p.name;
       text.style.pointerEvents = "none";
 
       g.appendChild(shadow);
       g.appendChild(rect);
+      g.appendChild(avBg);
+      g.appendChild(avText);
+      g.appendChild(iconHint);
       g.appendChild(text);
 
-      if (p.spouse) {
-        var sp = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        sp.setAttribute("x", NODE_W / 2);
-        sp.setAttribute("y", NODE_H + 18);
-        sp.setAttribute("text-anchor", "middle");
-        sp.setAttribute("fill", "#6b6b64");
-        sp.setAttribute("font-size", "10.5");
-        sp.setAttribute("font-weight", "500");
-        sp.setAttribute("font-family", FONT_STACK);
-        sp.textContent = "配 · " + p.spouse;
-        sp.style.pointerEvents = "none";
-        g.appendChild(sp);
+      if (spouse) {
+        var badge = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        badge.setAttribute("class", "spouse-badge");
+        var badgeBg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        badgeBg.setAttribute("x", nameX);
+        badgeBg.setAttribute("y", NODE_H / 2 + 4);
+        badgeBg.setAttribute("width", 34);
+        badgeBg.setAttribute("height", 14);
+        badgeBg.setAttribute("rx", 4);
+        badgeBg.setAttribute("ry", 4);
+        badgeBg.setAttribute("fill", "rgba(255,255,255,0.2)");
+        var badgeTx = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        badgeTx.setAttribute("x", nameX + 17);
+        badgeTx.setAttribute("y", NODE_H / 2 + 12);
+        badgeTx.setAttribute("text-anchor", "middle");
+        badgeTx.setAttribute("dominant-baseline", "middle");
+        badgeTx.setAttribute("fill", "#f5f4f0");
+        badgeTx.setAttribute("font-size", "9");
+        badgeTx.setAttribute("font-weight", "600");
+        badgeTx.setAttribute("font-family", FONT_STACK);
+        badgeTx.textContent = "配偶";
+        badgeTx.style.pointerEvents = "none";
+        badge.appendChild(badgeBg);
+        badge.appendChild(badgeTx);
+        g.appendChild(badge);
       }
 
       g.addEventListener("click", function () { selectPerson(p.id); });
@@ -387,9 +519,11 @@
       var child = e.dataset.child;
       var parent = e.dataset.parent;
       var person = e.dataset.person;
+      var spouse = e.dataset.spouse;
       if (child && PEOPLE[child] && String(PEOPLE[child].gen) === filterGen) keep = true;
       if (parent && PEOPLE[parent] && String(PEOPLE[parent].gen) === filterGen) keep = true;
       if (person && PEOPLE[person] && String(PEOPLE[person].gen) === filterGen) keep = true;
+      if (spouse && PEOPLE[spouse] && String(PEOPLE[spouse].gen) === filterGen) keep = true;
       e.classList.toggle("dimmed", !keep);
     });
   }
@@ -398,6 +532,7 @@
     selectedId = id;
     applyFilter();
     var p = PEOPLE[id];
+    if (!p) return;
     var empty = document.getElementById("panelEmpty");
     var card = document.getElementById("personCard");
     var panel = document.getElementById("panel");
@@ -407,19 +542,43 @@
     card.hidden = false;
 
     var spouseHtml = "";
-    if (p.spouse) {
-      spouseHtml = '<div class="spouse-note">配偶（示意）：' + p.spouse + "</div>";
+    if (isSpouse(p)) {
+      var partner = PEOPLE[p.spouseOf];
+      spouseHtml =
+        '<div class="spouse-note">' +
+          '<span class="spouse-pill">配偶</span> ' +
+          (partner ? '配偶于 <button type="button" class="inline-link" data-goto="' + partner.id + '">' + partner.name + "</button>" : "配偶") +
+        "</div>";
+    } else if (p.spouseId && PEOPLE[p.spouseId]) {
+      var sp = PEOPLE[p.spouseId];
+      spouseHtml =
+        '<div class="spouse-note">' +
+          '<span class="spouse-pill">配偶</span> ' +
+          '<button type="button" class="inline-link" data-goto="' + sp.id + '">' + sp.name + "</button>" +
+          " · 可点击配偶卡片查看瞬间" +
+        "</div>";
     } else if (p.id === "heying") {
-      spouseHtml = '<div class="spouse-note">配偶：暂无（待补）</div>';
+      spouseHtml = '<div class="spouse-note"><span class="spouse-pill">配偶</span> 暂无（待补）</div>';
     }
 
     var noteHtml = p.note
       ? '<div class="person-meta"><span>' + p.note + "</span></div>"
       : "";
 
-    var parentName = p.parent ? PEOPLE[p.parent].name : "—（支系起点）";
+    var parentName = "—";
+    if (isSpouse(p)) {
+      parentName = "配偶入谱（非本支血缘）";
+    } else if (p.parent && PEOPLE[p.parent]) {
+      parentName = PEOPLE[p.parent].name;
+    } else {
+      parentName = "—（支系起点）";
+    }
 
-    var momentsHtml = p.moments.map(function (m) {
+    var roleMeta = isSpouse(p)
+      ? '<span class="meta-spouse">配偶</span>'
+      : "<span>" + p.genLabel + "</span>";
+
+    var momentsHtml = (p.moments || []).map(function (m) {
       return (
         '<figure class="moment">' +
           '<div class="moment-media">' +
@@ -434,15 +593,20 @@
     }).join("");
 
     card.innerHTML =
-      "<h2>" + p.name + "</h2>" +
-      '<div class="person-meta">' +
-        "<span>" + p.genLabel + "</span>" +
-        "<span>父系：" + parentName + "</span>" +
+      '<div class="person-card-head">' +
+        '<div class="person-avatar" aria-hidden="true">' + avatarGlyph(p.name) + "</div>" +
+        "<div>" +
+          "<h2>" + p.name + "</h2>" +
+          '<div class="person-meta">' +
+            roleMeta +
+            "<span>" + (isSpouse(p) ? "关系：" : "父系：") + parentName + "</span>" +
+          "</div>" +
+        "</div>" +
       "</div>" +
       noteHtml +
       spouseHtml +
       '<div class="moments-title">瞬间 Moments</div>' +
-      momentsHtml +
+      (momentsHtml || '<p class="panel-empty-moments">暂无示意瞬间</p>') +
       '<button type="button" class="close-btn" id="closePanel">关闭</button>';
 
     panel.classList.add("open");
@@ -450,6 +614,12 @@
 
     var closeBtn = document.getElementById("closePanel");
     if (closeBtn) closeBtn.addEventListener("click", closePanel);
+
+    card.querySelectorAll("[data-goto]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        selectPerson(btn.getAttribute("data-goto"));
+      });
+    });
   }
 
   function closePanel() {

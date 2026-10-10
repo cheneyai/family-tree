@@ -394,6 +394,71 @@
     stroke-dasharray: 2.5 3.5;
     stroke-width: 1.25;
   }
+  .person-node.spouse-node .node-bg {
+    stroke: #e8e6e0;
+  }
+  .person-node.spouse-node:hover .node-bg {
+    filter: brightness(1.1);
+  }
+  .person-node.spouse-node.selected .node-bg {
+    stroke: var(--accent);
+    stroke-width: 3;
+  }
+  .person-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.35rem;
+  }
+  .person-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    background: linear-gradient(145deg, #5a5a55, #3d3d3a);
+    color: #fafaf8;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .spouse-pill {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--accent-deep);
+    background: var(--accent-soft);
+    padding: 0.12rem 0.45rem;
+    border-radius: 999px;
+    vertical-align: middle;
+  }
+  .meta-spouse {
+    background: var(--accent-soft) !important;
+    color: var(--accent-deep) !important;
+    border-color: rgba(196, 92, 58, 0.2) !important;
+  }
+  .inline-link {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: var(--accent-deep);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+  .inline-link:hover { color: var(--accent); }
+  .panel-empty-moments {
+    font-size: 0.85rem;
+    color: var(--ink-mute);
+    margin: 0.5rem 0 1rem;
+  }
   .gen-label {
     font-size: 11px;
     fill: var(--ink-mute);
@@ -639,8 +704,8 @@
   </header>
 
   <div class="note-bar">
-    <span><strong>示意说明：</strong>照片与短文均为占位，非正式谱牒；配偶关系以虚线示意。</span>
-    <span>虚线 = 配偶 · 实线 = 父子辈</span>
+    <span><strong>示意说明：</strong>照片与短文均为占位，非正式谱牒；配偶亦为家族成员卡片（含头像与「配偶」徽章）。</span>
+    <span>虚线 = 配偶连线 · 实线 = 父子辈 · 配偶可点击</span>
   </div>
 
   <div class="toolbar">
@@ -657,23 +722,23 @@
 
   <div class="main">
     <div class="graph-wrap">
-      <p class="graph-hint">点击人物节点 · 虚线为配偶 · 实线为父子辈</p>
-      <svg class="graph-svg" id="treeSvg" viewBox="0 0 1100 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="李登福支系族谱图">
+      <p class="graph-hint">点击人物或配偶卡片 · 头像节点 · 虚线为配偶连线 · 实线为父子辈</p>
+      <svg class="graph-svg" id="treeSvg" viewBox="0 0 1360 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="李登福支系族谱图">
         <defs>
           <filter id="nodeDrop" x="-20%" y="-20%" width="140%" height="160%">
             <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#1c1c1a" flood-opacity="0.1"/>
           </filter>
         </defs>
-        <rect class="branch-band" x="40" y="40" width="1020" height="88" rx="18"></rect>
-        <rect class="branch-band" x="40" y="178" width="1020" height="88" rx="18"></rect>
-        <rect class="branch-band" x="40" y="338" width="1020" height="100" rx="18"></rect>
-        <rect class="branch-band" x="40" y="518" width="1020" height="100" rx="18"></rect>
+        <rect class="branch-band" x="40" y="40" width="1280" height="100" rx="18"></rect>
+        <rect class="branch-band" x="40" y="188" width="1280" height="110" rx="18"></rect>
+        <rect class="branch-band" x="40" y="358" width="1280" height="130" rx="18"></rect>
+        <rect class="branch-band" x="40" y="538" width="1280" height="120" rx="18"></rect>
         <g id="edges"></g>
         <g id="nodes"></g>
-        <text class="gen-label" x="56" y="74">六世</text>
-        <text class="gen-label" x="56" y="214">七世</text>
-        <text class="gen-label" x="56" y="374">八世</text>
-        <text class="gen-label" x="56" y="554">九世</text>
+        <text class="gen-label" x="56" y="78">六世</text>
+        <text class="gen-label" x="56" y="228">七世</text>
+        <text class="gen-label" x="56" y="400">八世</text>
+        <text class="gen-label" x="56" y="580">九世</text>
       </svg>
     </div>
 
