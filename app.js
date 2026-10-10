@@ -219,8 +219,8 @@
 
   const GEN_COLORS = { 6: "#2e2e2b", 7: "#4a4a45", 8: "#c45c3a", 9: "#d4896e" };
   const SPOUSE_FILL = "#7a7870";
-  const NODE_W = 112;
-  const NODE_H = 64;
+  const NODE_W = 118;
+  const NODE_H = 68;
   const FONT_STACK = "Noto Sans SC, DM Sans, PingFang SC, Microsoft YaHei, sans-serif";
 
   let selectedId = null;
@@ -248,19 +248,19 @@
     var c2 = "hsl(" + (hue + 8) + ",22%,78%)";
     var c3 = "hsl(" + (hue - 4) + ",18%,70%)";
     var svg =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">' +
       '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
       '<stop offset="0%" stop-color="' + c1 + '"/>' +
       '<stop offset="50%" stop-color="' + c2 + '"/>' +
       '<stop offset="100%" stop-color="' + c3 + '"/>' +
       "</linearGradient></defs>" +
-      '<rect width="640" height="400" fill="url(#g)"/>' +
-      '<circle cx="520" cy="70" r="80" fill="rgba(255,255,255,0.35)"/>' +
-      '<circle cx="100" cy="340" r="100" fill="rgba(28,28,26,0.04)"/>' +
-      '<text x="320" y="190" text-anchor="middle" fill="rgba(28,28,26,0.28)" ' +
-      'font-family="DM Sans,Noto Sans SC,sans-serif" font-size="22" font-weight="600" letter-spacing="0.2em">示意照片</text>' +
-      '<text x="320" y="222" text-anchor="middle" fill="rgba(28,28,26,0.2)" ' +
-      'font-family="Noto Sans SC,sans-serif" font-size="13">素材稍后补</text>' +
+      '<rect width="800" height="600" fill="url(#g)"/>' +
+      '<circle cx="640" cy="90" r="110" fill="rgba(255,255,255,0.35)"/>' +
+      '<circle cx="120" cy="500" r="130" fill="rgba(28,28,26,0.04)"/>' +
+      '<text x="400" y="280" text-anchor="middle" fill="rgba(28,28,26,0.28)" ' +
+      'font-family="DM Sans,Noto Sans SC,sans-serif" font-size="28" font-weight="600" letter-spacing="0.2em">示意照片</text>' +
+      '<text x="400" y="320" text-anchor="middle" fill="rgba(28,28,26,0.2)" ' +
+      'font-family="Noto Sans SC,sans-serif" font-size="15">素材稍后补</text>' +
       "</svg>";
     return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
@@ -537,9 +537,11 @@
     var card = document.getElementById("personCard");
     var panel = document.getElementById("panel");
     var backdrop = document.getElementById("backdrop");
+    var actions = document.getElementById("panelActions");
 
-    empty.hidden = true;
+    if (empty) empty.hidden = true;
     card.hidden = false;
+    if (actions) actions.hidden = false;
 
     var spouseHtml = "";
     if (isSpouse(p)) {
@@ -562,7 +564,7 @@
     }
 
     var noteHtml = p.note
-      ? '<div class="person-meta"><span>' + p.note + "</span></div>"
+      ? '<div class="person-meta" style="margin-bottom:0.75rem"><span>' + p.note + "</span></div>"
       : "";
 
     var parentName = "—";
@@ -582,7 +584,7 @@
       return (
         '<figure class="moment">' +
           '<div class="moment-media">' +
-            '<img src="' + imgUrl(m.seed) + '" alt="' + p.name + ' 示意照片" loading="lazy" width="640" height="400">' +
+            '<img src="' + imgUrl(m.seed) + '" alt="' + p.name + ' 示意照片" loading="lazy" width="800" height="600">' +
           "</div>" +
           "<figcaption>" +
             '<div class="cap-year">' + m.year + '<span class="demo-tag">示例</span></div>' +
@@ -606,14 +608,15 @@
       noteHtml +
       spouseHtml +
       '<div class="moments-title">瞬间 Moments</div>' +
-      (momentsHtml || '<p class="panel-empty-moments">暂无示意瞬间</p>') +
-      '<button type="button" class="close-btn" id="closePanel">关闭</button>';
+      (momentsHtml || '<p class="panel-empty-moments">暂无示意瞬间</p>');
 
     panel.classList.add("open");
+    panel.setAttribute("aria-hidden", "false");
     backdrop.classList.add("open");
+    document.body.classList.add("drawer-open");
 
-    var closeBtn = document.getElementById("closePanel");
-    if (closeBtn) closeBtn.addEventListener("click", closePanel);
+    var scroll = panel.querySelector(".panel-scroll");
+    if (scroll) scroll.scrollTop = 0;
 
     card.querySelectorAll("[data-goto]").forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -627,11 +630,17 @@
     applyFilter();
     var panel = document.getElementById("panel");
     var backdrop = document.getElementById("backdrop");
-    if (panel) panel.classList.remove("open");
+    if (panel) {
+      panel.classList.remove("open");
+      panel.setAttribute("aria-hidden", "true");
+    }
     if (backdrop) backdrop.classList.remove("open");
+    document.body.classList.remove("drawer-open");
     var empty = document.getElementById("panelEmpty");
     var card = document.getElementById("personCard");
+    var actions = document.getElementById("panelActions");
     if (empty) empty.hidden = false;
+    if (actions) actions.hidden = true;
     if (card) {
       card.hidden = true;
       card.innerHTML = "";
@@ -640,6 +649,11 @@
 
   function setupUI() {
     document.getElementById("backdrop").addEventListener("click", closePanel);
+    var closeFixed = document.getElementById("closePanelFixed");
+    if (closeFixed) closeFixed.addEventListener("click", closePanel);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closePanel();
+    });
     document.getElementById("genChips").addEventListener("click", function (e) {
       var btn = e.target.closest(".chip");
       if (!btn) return;
